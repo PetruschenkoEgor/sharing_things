@@ -52,6 +52,3 @@ class ExchangeProposal(models.Model):
     class Meta:
         verbose_name = 'Предложение обмена'
         verbose_name_plural = 'Предложения обмена'
-
-    def __str__(self):
-        return self.ad_sender
