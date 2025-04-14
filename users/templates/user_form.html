@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+{% block title %}
+{% if not user.is_authenticated %}Регистрация{% endif %}
+{% if user.is_authenticated %}Редактирование личных данных{% endif %}
+{% endblock %}
+{% block content %}
+<div class="container">
+    <form method="post" enctype="multipart/form-data" action="" style="width: 100%" class="mx-auto w-50">
+                        {% csrf_token %}
+                        <fieldset>
+                <legend class="center">
+                    {% if object %}
+                    <h3>Редактирование данных</h3>
+                    {% else %}
+                    <h3>Регистрация</h3>
+                    {% endif %}
+                </legend>
+                {{ form.as_p }}
+                            {% if object %}
+            <button type="submit" class="btn btn btn-lg">Редактировать</button>
+            {% else %}
+                    <button type="submit" class="btn btn btn-lg">Зарегистрироваться</button>
+            {% endif %}
+            </fieldset>
+    </form>
+</div>
+{% endblock %}

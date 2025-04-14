@@ -24,6 +24,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'crispy_forms',
+
     'ads',
     'users',
 ]
@@ -57,7 +59,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -103,6 +105,13 @@ USE_I18N = True
 
 USE_TZ = True
 
+# перенаправление после входа
+LOGIN_REDIRECT_URL = "ads:home"
+# перенаправление после выхода
+LOGOUT_REDIRECT_URL = "users:login"
+
+# перенаправление на страницу авторизации при ограничении доступа только для авторизованных пользователей
+LOGIN_URL = "users:login"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
@@ -111,7 +120,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (BASE_DIR / 'static',)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-MEDIA_URL = "media/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 AUTH_USER_MODEL = "users.User"

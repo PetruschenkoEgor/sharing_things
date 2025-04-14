@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+{% block title %}Форма объявления{% endblock %}
+{% block content %}
+<div class="container">
+<form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset>
+                <legend class="center">
+                    {% if object %}
+                    <h3>Редактирование объявления</h3>
+                    {% else %}
+                    <h3>Заполните форму для добавления объявления</h3>
+                    {% endif %}
+                </legend>
+                <div class="container">
+                {{ form.as_p }}
+                {% if object %}
+                <button type="submit" class="btn btn-secondary btn-lg">Редактировать</button>
+                {% else %}
+                <button type="submit" class="btn btn-secondary btn-lg">Создать</button>
+                {% endif %}
+                <a href="{{ request.META.HTTP_REFERER }}"><button type="button" class="btn btn-danger btn-lg">Назад</button></a>
+                    </div>
+            </fieldset>
+        </form>
+    </div>
+{% endblock %}

@@ -11,17 +11,30 @@
             <a class="nav-link" aria-current="page" href="{% url 'ads:home' %}">Главная</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="{% url 'ads:ads-list' %}">Объявления</a>
           </li>
+          {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" aria-disabled="true">Disabled</a>
+            <a class="nav-link" href="{% url 'ads:ads-mylist' %}">Мои объявления</a>
           </li>
+          {% endif %}
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Действия</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              {% if not user.is_authenticated %}
+              <li><a class="dropdown-item" href="{% url 'users:login' %}">Войти</a></li>
+              <li><a class="dropdown-item" href="{% url 'users:register' %}">Зарегистрироваться</a></li>
+              {% endif %}
+              {% if user.is_authenticated %}
+              <li><a class="dropdown-item" href="{% url 'users:personal-account' user.pk %}">Личный кабинет</a></li>
+              {% endif %}
+              <li><a class="dropdown-item" href="{% url 'ads:ad-create' %}">Добавить объявление</a></li>
+              {% if user.is_authenticated %}
+              <li><form method="post" action="{% url 'users:logout' %}">
+            {% csrf_token %}
+                <a><button type="submit" class="btn">Выход</button></a>
+              </form></li>
+              {% endif %}
             </ul>
           </li>
         </ul>

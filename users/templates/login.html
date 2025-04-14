@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+{% block title %}Вход{% endblock %}
+{% block content %}
+<div class="container">
+    <form method="post" enctype="multipart/form-data" action="{% url 'users:login' %}" style="width: 100%" class="mx-auto w-50">
+            {% csrf_token %}
+            <fieldset>
+                <legend class="center">
+                    <h3>Вход</h3>
+                </legend>
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-secondary btn-lg">Войти</button>
+            </fieldset>
+        </form>
+</div>
+{% endblock %}
