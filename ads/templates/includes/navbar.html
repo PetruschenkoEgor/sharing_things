@@ -18,6 +18,17 @@
             <a class="nav-link" href="{% url 'ads:ads-mylist' %}">Мои объявления</a>
           </li>
           {% endif %}
+          {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Мои обмены</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'ads:offers-exchanges' %}">Вам предлагают обмен</a></li>
+              <li><a class="dropdown-item" href="{% url 'ads:my-exchanges-list' %}">Вы предлагаете обмен</a></li>
+              <li><a class="dropdown-item" href="{% url 'ads:exchanges-list' %}">Обмены</a></li>
+            </ul>
+          </li>
+          {% endif %}
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Действия</a>
             <ul class="dropdown-menu">

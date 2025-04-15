@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+{% block title %}{{ current_page }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-6">
+                <div class="col-12">
+    <div class="row">
+<div class="col-1"></div>
+    <div class="col-4">
+<img src="{{ ad.image_url|media_filter }}" class="img-top mt-5" alt="...">
+    </div>
+        <div class="col-6">
+<h1 class="mt-5">{{ ad.title }}</h1>
+            <p style="font-size: 25px;">{{ ad.description|truncatechars:100 }}</p>
+            <p style="font-size: 25px;"><strong>Категория:</strong> {{ ad.category }}</p>
+            <p style="font-size: 25px;"><strong>Состояние товара:</strong> {{ ad.condition }}</p>
+            <p style="font-size: 25px;"><strong>Дата размещения:</strong> {{ ad.created_at|date:"d M Y" }}</p>
+        </div>
+        </div>
+</div>
+            </div>
+
+
+            <div class="col-6">
+                <div class="col-12">
+    <div class="row">
+<div class="col-1"></div>
+    <form method="post">
+        {% csrf_token %}
+        <h3>Предлагаю взамен:</h3>
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Предложить обмен</button>
+    </form>
+        </div>
+</div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

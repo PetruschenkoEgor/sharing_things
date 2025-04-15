@@ -43,6 +43,7 @@ class Ad(models.Model):
 class ExchangeProposal(models.Model):
     """ Модель для предложений обмена. """
 
+    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Создатель предложения обмена')
     ad_sender = models.ForeignKey(Ad, on_delete=models.DO_NOTHING, verbose_name='Что менять', related_name='sender_exchange_proposals')
     ad_receiver = models.ForeignKey(Ad, on_delete=models.DO_NOTHING, verbose_name='На что менять', related_name='receiver_exchange_proposals')
     comment = models.TextField(verbose_name='Комментарий')

@@ -55,3 +55,10 @@ body {
     align-items: center;
     gap: 1rem;
 }
+
+.container-button-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}

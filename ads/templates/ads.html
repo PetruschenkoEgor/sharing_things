@@ -15,7 +15,7 @@
       <a href="{% url 'ads:ad-delete' ad.pk %}" class="btn btn-danger mt-2" style="width: 100%;">Удалить</a>
       {% else %}
     <a href="{% url 'ads:ad-detail' ad.pk %}" class="btn btn-primary" style="width: 100%;">Посмотреть объявление</a>
-      <a href="#" class="btn btn-primary mt-2" style="width: 100%;">Предложить обмен</a>
+      <a href="{% url 'ads:exchange-create' ad.pk %}" class="btn btn-primary mt-2" style="width: 100%;">Предложить обмен</a>
       {% endif %}
   </div>
 </div>

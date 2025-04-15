@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+{% block title %}{{ current_page }}{% endblock %}
+{% block content %}
+{% load static %}
+
+<div class="container">
+    <div class="col-12">
+        <h1 class="mb-5 mt-3" style="text-align: center;">{{ current_page }}</h1>
+        {% for exchange in exchanges %}
+        <div class="row">
+            <div class="col-5">
+                <div class="col-12">
+    <div class="row">
+<div class="col-1"></div>
+    <div class="col-4">
+<img src="{{ exchange.ad_receiver.image_url|media_filter }}" class="img-top mt-5" alt="...">
+    </div>
+        <div class="col-6">
+<h1 class="mt-5">{{ exchange.ad_receiver.title }}</h1>
+            <p style="font-size: 15px;"><strong>Категория:</strong> {{ exchange.ad_receiver.category }}</p>
+            <p style="font-size: 15px;"><strong>Состояние товара:</strong> {{ exchange.ad_receiver.condition }}</p>
+        </div>
+        </div>
+</div>
+            </div>
+            <div class="col-2">
+<img src="{% static 'images/стрелка.jpg' %}" class="img-top mt-5" alt="...">
+            </div>
+<div class="col-5">
+                <div class="col-12">
+    <div class="row">
+<div class="col-1"></div>
+    <div class="col-4">
+<img src="{{ exchange.ad_sender.image_url|media_filter }}" class="img-top mt-5" alt="...">
+    </div>
+        <div class="col-6">
+<h1 class="mt-5">{{ exchange.ad_sender.title }}</h1>
+            <p style="font-size: 15px;"><strong>Категория:</strong> {{ exchange.ad_sender.category }}</p>
+            <p style="font-size: 15px;"><strong>Состояние товара:</strong> {{ exchange.ad_sender.condition }}</p>
+        </div>
+        </div>
+</div>
+            </div>
+            {% if current_page == 'Вам предлагают обмен' %}
+            <form method="post" action="{% url 'ads:accept-exchange-proposal' exchange.pk %}">{% csrf_token %}
+            <button type="submit" class="btn btn-secondary btn-lg" style="width: 100%;">Принять предложение</button>
+                </form>
+            <form method="post" action="{% url 'ads:refuse-exchange-proposal' exchange.pk %}">{% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-lg" style="width: 100%;">Отказаться</button>
+                </form>
+            {% else %}
+            <form method="post" action="{% url 'ads:delete-exchange-proposal' exchange.pk %}">{% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-lg" style="width: 100%;">Отменить</button>
+                </form>
+            {% endif %}
+    </div>
+        {% endfor %}
+</div>
+</div>
+            {% endblock %}
