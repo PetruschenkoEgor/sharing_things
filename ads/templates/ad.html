@@ -16,7 +16,7 @@
             <p style="font-size: 25px;"><strong>Дата размещения:</strong> {{ ad.created_at|date:"d M Y" }}</p>
         </div>
         <div class="container-button mt-5">
-                <a href="#"><button type="button" class="btn btn-secondary btn-lg" style="width: 250px;">Предложить обмен</button></a>
+                <a href="{% url 'ads:exchange-create' ad.pk %}"><button type="button" class="btn btn-secondary btn-lg" style="width: 250px;">Предложить обмен</button></a>
             <a href="{{ request.META.HTTP_REFERER }}"><button type="button" class="btn btn-danger btn-lg" style="width: 250px;">Назад</button></a>
                     </div>
         </div>

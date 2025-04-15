@@ -49,9 +49,10 @@
             </ul>
           </li>
         </ul>
-        <form role="search">
-          <input class="form-control" type="search" placeholder="Поиск" aria-label="Search">
-        </form>
+        <form method="get" action="{% url 'ads:search-ads' %}">
+    <input type="text" name="query" placeholder="Введите поисковый запрос" value="{{ request.GET.query }}">
+    <button class="btn btn-secondary" type="submit">Искать</button>
+</form>
       </div>
     </div>
   </nav>

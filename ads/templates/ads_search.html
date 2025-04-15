@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+{% block title %}{{ current_page }}{% endblock %}
+{% block content %}
+<h1 class="mb-5 mt-3" style="text-align: center;">Результаты поиска</h1>
+
+<div class="container mb-5">
+<form method="get">
+    <input type="text" name="query" placeholder="Поиск" value="{{ request.GET.query }}">
+    <button class="btn btn-secondary" type="submit">Искать</button>
+</form>
+<form method="get">
+        <select name="category">
+            <option value="" selected>Любая категория</option>
+            {% for choice in categories %}
+            <option value="{{ choice.0 }}" {% if choice.0 == request.GET.category %}selected{% endif %}>{{ choice.1 }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="condition">
+            <option value="" selected>Любое состояние</option>
+            {% for choice in conditions %}
+            <option value="{{ choice.0 }}" {% if choice.0 == request.GET.condition %}selected{% endif %}>{{ choice.1 }}</option>
+            {% endfor %}
+        </select>
+
+        <button class="btn btn-secondary" type="submit">Фильтровать</button>
+    </form>
+</div>
+
+{% if ads %}
+<div class="container cards-container">
+        {% for ad in ads %}
+        <div class="card" style="width: 18rem;">
+    <a href="{% url 'ads:ad-detail' ad.pk %}"><img src="{{ ad.image_url|media_filter }}" class="card-img-top img-podsvetka" alt="..."></a>
+  <div class="card-body">
+    <h5 class="card-title">{{ ad.title }}</h5>
+    <p class="card-text">{{ ad.description }}</p>
+      {% if request.user == ad.user %}
+    <a href="{% url 'ads:ad-update' ad.pk %}" class="btn btn-secondary" style="width: 100%;">Редактировать</a>
+      <a href="{% url 'ads:ad-delete' ad.pk %}" class="btn btn-danger mt-2" style="width: 100%;">Удалить</a>
+      {% else %}
+    <a href="{% url 'ads:ad-detail' ad.pk %}" class="btn btn-primary" style="width: 100%;">Посмотреть объявление</a>
+      <a href="{% url 'ads:exchange-create' ad.pk %}" class="btn btn-primary mt-2" style="width: 100%;">Предложить обмен</a>
+      {% endif %}
+  </div>
+</div>
+        {% endfor %}
+    {% include 'includes/pagination.html' %}
+</div>
+{% else %}
+<div class="container">
+    <p>Объявлений не найдено.</p>
+{% endif %}
+    </div>
+{% endblock %}

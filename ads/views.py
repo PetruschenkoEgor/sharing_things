@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.postgres.search import SearchVector, SearchQuery
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
@@ -23,7 +25,7 @@ class HomeTemplateView(TemplateView):
         return context
 
 
-class AdCreateView(CreateView):
+class AdCreateView(LoginRequiredMixin, CreateView):
     """ Создание объявления. """
 
     model = Ad
@@ -75,7 +77,7 @@ class AdListView(ListView):
         return queryset
 
 
-class AdMyListView(ListView):
+class AdMyListView(LoginRequiredMixin, ListView):
     """ Список моих объявлений. """
 
     model = Ad
@@ -119,7 +121,7 @@ class AdDetailView(DetailView):
         return context
 
 
-class AdUpdateView(UpdateView):
+class AdUpdateView(LoginRequiredMixin, UpdateView):
     """ Редактирование объявления. """
 
     model = Ad
@@ -136,7 +138,7 @@ class AdUpdateView(UpdateView):
         return context
 
 
-class AdDeleteView(DeleteView):
+class AdDeleteView(LoginRequiredMixin, DeleteView):
     """ Удаление объявления. """
 
     model = Ad
@@ -152,7 +154,7 @@ class AdDeleteView(DeleteView):
         return context
 
 
-class ExchangeProposalCreate(CreateView):
+class ExchangeProposalCreate(LoginRequiredMixin, CreateView):
     """ Создание обмена. """
 
     model = ExchangeProposal
@@ -190,7 +192,7 @@ class ExchangeProposalCreate(CreateView):
         return context
 
 
-class ExchangeProposalListView(ListView):
+class ExchangeProposalListView(LoginRequiredMixin, ListView):
     """ Список обменов. """
 
     model = ExchangeProposal
@@ -212,7 +214,7 @@ class ExchangeProposalListView(ListView):
         return context
 
 
-class MyExchangeProposalListView(ListView):
+class MyExchangeProposalListView(LoginRequiredMixin, ListView):
     """ Я предлагаю поменяться. """
 
     model = ExchangeProposal
@@ -240,7 +242,7 @@ class MyExchangeProposalListView(ListView):
         return context
 
 
-class OffersExchangeProposalListView(ListView):
+class OffersExchangeProposalListView(LoginRequiredMixin, ListView):
     """ Вам предлагают поменяться. """
 
     model = ExchangeProposal
@@ -266,7 +268,7 @@ class OffersExchangeProposalListView(ListView):
         return context
 
 
-class AcceptExchangeProposalView(SingleObjectMixin, View):
+class AcceptExchangeProposalView(LoginRequiredMixin, SingleObjectMixin, View):
     """ Обрабатывает нажатие кнопки Принять предложение(принять обмен). """
 
     model = ExchangeProposal
@@ -279,7 +281,7 @@ class AcceptExchangeProposalView(SingleObjectMixin, View):
         return HttpResponseRedirect(reverse('ads:offers-exchanges'))
 
 
-class RefuseExchangeProposalView(SingleObjectMixin, View):
+class RefuseExchangeProposalView(LoginRequiredMixin, SingleObjectMixin, View):
     """ Обрабатывает нажатие кнопки Отказаться(отказаться от обмена). """
 
     model = ExchangeProposal
@@ -292,8 +294,47 @@ class RefuseExchangeProposalView(SingleObjectMixin, View):
         return HttpResponseRedirect(reverse('ads:offers-exchanges'))
 
 
-class ExchangeProposalDeleteView(DeleteView):
+class ExchangeProposalDeleteView(LoginRequiredMixin, DeleteView):
     """ Удаление предложения об обмене. """
 
     model = ExchangeProposal
     success_url = reverse_lazy('ads:my-exchanges-list')
+
+
+class AdSearchListView(ListView):
+    """ Поиск по объявлениям с пагинацией(ищет в названии и описании). """
+
+    model = Ad
+    template_name = 'ads_search.html'
+    context_object_name = 'ads'
+    paginate_by = 20
+
+    def get_queryset(self):
+        """ Полнотекстовый поиск, фильтрация по категории и состоянию товара. """
+
+        query = self.request.GET.get('query', '')
+        category = self.request.GET.get('category', '')
+        condition = self.request.GET.get('condition', '')
+
+        queryset = Ad.objects.all()
+
+        if query:
+            queryset = queryset.annotate(search=SearchVector('title', 'description')).filter(search=SearchQuery(query))
+
+        if category:
+            queryset = queryset.filter(category=category)
+
+        if condition:
+            queryset = queryset.filter(condition=condition)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        """ Передача названия текущей страницы, категорий и состояния товара в шаблон. """
+
+        context = super().get_context_data(**kwargs)
+        context['current_page'] = 'Поиск'
+        context['categories'] = Ad.CATEGORY_CHOICES
+        context['conditions'] = Ad.CONDITION_CHOICES
+
+        return context

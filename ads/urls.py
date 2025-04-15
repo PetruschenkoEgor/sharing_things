@@ -3,7 +3,8 @@ from django.urls import path
 from ads.apps import AdsConfig
 from ads.views import HomeTemplateView, AdCreateView, AdListView, AdDetailView, AdMyListView, AdUpdateView, \
     AdDeleteView, ExchangeProposalCreate, ExchangeProposalListView, MyExchangeProposalListView, \
-    OffersExchangeProposalListView, AcceptExchangeProposalView, RefuseExchangeProposalView, ExchangeProposalDeleteView
+    OffersExchangeProposalListView, AcceptExchangeProposalView, RefuseExchangeProposalView, ExchangeProposalDeleteView, \
+    AdSearchListView
 
 app_name = AdsConfig.name
 
@@ -22,4 +23,5 @@ urlpatterns = [
     path('accept-exchange-proposal/<int:pk>/', AcceptExchangeProposalView.as_view(), name='accept-exchange-proposal'),
     path('refuse-exchange-proposal/<int:pk>/', RefuseExchangeProposalView.as_view(), name='refuse-exchange-proposal'),
     path('delete-exchange-proposal/<int:pk>/', ExchangeProposalDeleteView.as_view(), name='delete-exchange-proposal'),
+    path('search/', AdSearchListView.as_view(), name='search-ads'),
 ]
