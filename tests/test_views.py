@@ -198,8 +198,8 @@ class OffersExchangeProposalListViewTest(TestCase):
         response = self.client.get(reverse("ads:offers-exchanges"))
         exchanges = list(response.context["exchanges"])
 
-        self.assertIn(self.exchange_from_other, exchanges)
-        self.assertNotIn(self.exchange_proposed, exchanges)
+        self.assertNotIn(self.exchange_from_other, exchanges)
+        self.assertIn(self.exchange_proposed, exchanges)
 
     def test_offers_exchange_proposal_list_view_requires_authentication(self):
         """Тест проверяет, что только авторизованные пользователи могут посмотреть предложения обмена."""

@@ -120,7 +120,12 @@ class AdDetailView(DetailView):
         """Передача названия текущей страницы в шаблон."""
 
         context = super().get_context_data(**kwargs)
+        if Ad.objects.get(id=self.object.id).user == self.request.user:
+            my = 'Мое объявление'
+        else:
+            my = ''
         context["current_page"] = "Объявление"
+        context["my"] = my
 
         return context
 
@@ -262,7 +267,7 @@ class OffersExchangeProposalListView(LoginRequiredMixin, ListView):
 
         queryset = super().get_queryset()
         user = self.request.user
-        users_ads = Ad.objects.filter(user=user)
+        users_ads = Ad.objects.exclude(user=user)
         queryset = ExchangeProposal.objects.filter(ad_receiver__in=users_ads, status="Ожидает")
 
         return queryset

@@ -5,7 +5,9 @@
 <h1 class="mb-5" style="text-align: center;">Личные данные</h1>
 <div class="container">
             <p style="font-size: 25px;"><strong>Email:</strong> {{ user.email }}</p>
+    {% if user.phone %}
             <p style="font-size: 25px;"><strong>Телефон:</strong> {{ user.phone }}</p>
+    {% endif %}
         </div>
         <div class="container-button mt-5">
                 <a href="{% url 'users:user-update' user.pk %}"><button type="button" class="btn btn-secondary btn-lg" style="width: 250px;">Редактировать</button></a>
