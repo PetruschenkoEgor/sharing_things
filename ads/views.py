@@ -31,13 +31,12 @@ class AdCreateView(LoginRequiredMixin, CreateView):
     model = Ad
     form_class = AdForm
     template_name = 'ad_form.html'
-    success_url = reverse_lazy('ads:ads-mylist')
 
     def get_context_data(self, **kwargs):
         """ Передача названия текущей страницы в шаблон. """
 
         context = super().get_context_data(**kwargs)
-        context['current_page'] = 'Добавление обявления'
+        context['current_page'] = 'Добавление объявления'
 
         return context
 
@@ -49,6 +48,11 @@ class AdCreateView(LoginRequiredMixin, CreateView):
         ad.save()
 
         return super().form_valid(form)
+
+    def get_success_url(self):
+        """ Перенаправление на созданное объявление. """
+
+        return reverse('ads:ad-detail', kwargs={'pk': self.object.pk})
 
 
 class AdListView(ListView):
@@ -255,7 +259,7 @@ class OffersExchangeProposalListView(LoginRequiredMixin, ListView):
         queryset = super().get_queryset()
         user = self.request.user
         users_ads = Ad.objects.filter(user=user)
-        queryset = ExchangeProposal.objects.filter(ad_sender__in=users_ads, status='Ожидает')
+        queryset = ExchangeProposal.objects.filter(ad_receiver__in=users_ads, status='Ожидает')
 
         return queryset
 
@@ -316,7 +320,10 @@ class AdSearchListView(ListView):
         category = self.request.GET.get('category', '')
         condition = self.request.GET.get('condition', '')
 
-        queryset = Ad.objects.all()
+        if self.request.user.is_authenticated:
+            queryset = Ad.objects.exclude(user=self.request.user)
+        else:
+            queryset = Ad.objects.all()
 
         if query:
             queryset = queryset.annotate(search=SearchVector('title', 'description')).filter(search=SearchQuery(query))

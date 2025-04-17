@@ -1,6 +1,18 @@
 {% extends 'base.html' %}
 {% load my_tags %}
 {% block title %}Главная{% endblock %}
+{% load static %}
 {% block content %}
+<div class="container">
+    <h1 class="mb-5 mt-3" style="text-align: center;">Добро пожаловать на сайт обмена вещами!</h1>
+    <p class="mb-5 mt-3" style="text-align: center; font-size: 25px;">Отдай ненужную вещь, получи нужную!</p>
 
+    <div class="container mb-5 container-button">
+<form method="get" action="{% url 'ads:search-ads' %}">
+    <input type="text" name="query" placeholder="Поиск" value="{{ request.GET.query }}">
+    <button class="btn btn-secondary" type="submit">Искать</button>
+</form>
+
+</div>
+</div>
 {% endblock %}

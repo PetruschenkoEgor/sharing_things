@@ -62,3 +62,17 @@ body {
     align-items: center;
     gap: 1rem;
 }
+
+.bg-section {
+    background-image: url("{% static 'images/давай_меняться.jpg' %}");
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+}
+
+.bg-section h1, .bg-section p {
+    color: white;
+}
